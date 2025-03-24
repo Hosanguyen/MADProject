@@ -4,3 +4,4 @@ dotenv
 pymongo
 motor
 pydantic<2.0
+aiomysql

@@ -131,7 +131,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n  \"statisticTypeId\": \"{{statistic_type_id}}\",\n  \"value\": 22.5,\n  \"timestamp\": \"2025-03-23T10:00:00\"\n}"
+					"raw": "{\n    \"petId\": \"{{pet_id}}\",\n  \"statisticTypeId\": \"{{statistic_type_id}}\",\n  \"value\": 22.5,\n  \"recorded_at\": \"2025-03-23 10:00:00\"\n}"
 				},
 				"url": {
 					"raw": "http://{{server}}/statistic-data",
@@ -195,7 +195,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n  \"statisticTypeId\": \"{{statistic_type_id}}\",\n  \"value\": 25.0,\n  \"timestamp\": \"2025-03-23T12:00:00\"\n}"
+					"raw": "{\n  \"value\": 25.0,\n  \"recorded_at\": \"2025-03-23T12:00:00\"\n}"
 				},
 				"url": {
 					"raw": "http://{{server}}/statistic-data/{{statistic_data_id}}",
@@ -225,6 +225,26 @@
 					"path": [
 						"statistic-data",
 						"{{statistic_data_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Statistic by Statistic Type",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://{{server}}/statistic-data/getByType/{{statistic_type_id}}",
+					"protocol": "http",
+					"host": [
+						"{{server}}"
+					],
+					"path": [
+						"statistic-data",
+						"getByType",
+						"{{statistic_type_id}}"
 					]
 				}
 			},

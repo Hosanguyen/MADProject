@@ -294,7 +294,7 @@ CREATE TABLE pet_statistic
   (
      id               INT PRIMARY KEY auto_increment,
      value            FLOAT,
-     recorded_at      DATE,
+     recorded_at      DATETIME,
      note             VARCHAR(255),
      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
      updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,

@@ -4,6 +4,5 @@ from datetime import datetime
 
 class StatisticDataModel(BaseModel):
     id: Optional[int] = None
-    statisticTypeId: int
     value: float
-    timestamp: datetime = datetime.utcnow()
+    recorded_at: datetime = datetime.utcnow()

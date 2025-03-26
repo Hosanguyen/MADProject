@@ -3,6 +3,7 @@ from app.models.StatisticTypeModel import StatisticTypeModel
 from app.models.StatisticDataModel import StatisticDataModel
 from app.services.StatisticDataService import StatisticDataService
 from app.services.StatisticTypeService import StatisticTypeService
+from app.schemas.StatisticDataSchema import StatisticDataCreate
 from typing import List
 
 router = APIRouter(tags=["statistic"])
@@ -38,12 +39,16 @@ async def delete_statistic_type(statId: str):
 
 ### API Statistic Data ###
 @router.post("/statistic-data", response_model=StatisticDataModel)
-async def create_statistic_data(stat_data: StatisticDataModel):
+async def create_statistic_data(stat_data: StatisticDataCreate):
     return await StatisticDataService.create(stat_data)
 
 @router.get("/statistic-data", response_model=List[StatisticDataModel])
 async def get_statistic_data():
     return await StatisticDataService.getAll()
+
+@router.get("/statistic-data/getByType/{statisticType}", response_model=List[StatisticDataModel])
+async def get_statistic_data(statisticType: str):
+    return await StatisticDataService.getByType(statisticType)
 
 @router.get("/statistic-data/{dataId}", response_model=StatisticDataModel)
 async def get_statistic_data_by_id(dataId: str):

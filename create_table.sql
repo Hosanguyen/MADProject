@@ -199,6 +199,7 @@ CREATE TABLE item
      quantity    INT,
      description VARCHAR(255),
      item_typeid INT,
+     manufacturer VARCHAR(255),
      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
      updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
      FOREIGN KEY (item_typeid) REFERENCES item_type(id)
@@ -250,33 +251,6 @@ CREATE TABLE order_item
      FOREIGN KEY (cart_itemid) REFERENCES cart_item(id)
   );
 
--- Supplier Table
-CREATE TABLE supplier
-  (
-     id      INT PRIMARY KEY auto_increment,
-     name    VARCHAR(255),
-     email   VARCHAR(255),
-     phone   VARCHAR(255),
-     address VARCHAR(255),
-     note    VARCHAR(255),
-     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-  );
-
--- Supplier Item Table
-CREATE TABLE supplier_item
-  (
-     id         INT PRIMARY KEY auto_increment,
-     price      FLOAT,
-     quantity   INT,
-     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-     supplierid INT,
-     itemid     INT,
-     FOREIGN KEY (supplierid) REFERENCES supplier(id),
-     FOREIGN KEY (itemid) REFERENCES item(id)
-  );
-
 -- GPS Device Table
 CREATE TABLE gps_device
   (
@@ -319,7 +293,6 @@ CREATE TABLE statistic_type
 CREATE TABLE pet_statistic
   (
      id               INT PRIMARY KEY auto_increment,
-     name             VARCHAR(255),
      value            FLOAT,
      recorded_at      DATE,
      note             VARCHAR(255),

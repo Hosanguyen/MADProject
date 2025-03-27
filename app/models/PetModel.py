@@ -33,5 +33,3 @@ class PetCreate(PetBase):
     weight: float
     image_url: Optional[str] = None
     userid: int
-
-class Pet

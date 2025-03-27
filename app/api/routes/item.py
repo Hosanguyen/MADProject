@@ -9,10 +9,12 @@ router = APIRouter(tags=["item"])
 
 @router.post("/item/add")
 async def create_item(item: ItemCreate):
-    if(await ItemService.create(item)):
-        return {"message": "Created Successfully"}
-    else:
-        return {"message": "Failed"}
+    success = await ItemService.create(item)
+    
+    if success:
+        return {"message": "Created successfully"}
+    
+    raise HTTPException(status_code=400, detail="Failed to create item data")
 
 
 @router.get("/item", response_model=List[ItemModel])
@@ -34,13 +36,15 @@ async def update(item: ItemModel):
 
 @router.put("/item/changeQuantity")
 async def change_quantity(item: ItemUpdateQuantity):
-    if(await ItemService.changeQuantity(item.itemId, item.quantity)):
+    success = await ItemService.changeQuantity(item.itemId, item.quantity)
+    
+    if success:
         return {"message": "Updated successfully"}
-    else:
-        {"message": "Updated Failed"}
+    
+    raise HTTPException(status_code=400, detail="Failed to update item data")
 
 @router.delete("/item/delete/{itemId}")
-async def delete(itemId: int):
+async def delete(itemId: UUID):
     if not await ItemService.delete(itemId):
         raise HTTPException(status_code=404, detail="Statistic Data not found")
     return {"message": "Deleted successfully"}

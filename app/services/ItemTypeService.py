@@ -19,10 +19,11 @@ class ItemTypeService:
             async with conn.cursor() as cursor:
                 await cursor.execute(query, values)
                 await conn.commit()
-                return True
+        except:
+            return False
         finally:
             conn.close()
-        return False
+        return True
     
     @staticmethod
     async def getAll() -> List[ItemTypeModel]:
@@ -62,7 +63,7 @@ class ItemTypeService:
     async def update(itemType: ItemTypeModel) -> bool:
         conn = await ItemTypeService.db.acquire()
         query = f"UPDATE {ItemTypeService.dbItemtype} SET name = %s, unit =  %s, note = %s WHERE id = %s"
-        values = (itemType.name, itemType.unit, itemType.note, itemType.id)
+        values = (itemType.name, itemType.unit, itemType.note, str(itemType.id))
 
         try: 
             async with conn.cursor() as cursor:
@@ -77,6 +78,7 @@ class ItemTypeService:
     
     @staticmethod
     async def delete(itemTypeId: UUID) -> bool:
+        print(itemTypeId)
         conn = await ItemTypeService.db.acquire()
         query = f"DELETE FROM {ItemTypeService.dbItemtype} WHERE id = %s"
         values = (itemTypeId)

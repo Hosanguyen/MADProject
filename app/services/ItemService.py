@@ -18,10 +18,11 @@ class ItemService:
             async with conn.cursor() as cursor:
                 await cursor.execute(query, (item.name, item.price, item.quantity, item.description, item.manufacturer, item.itemTypeId))
                 await conn.commit()
-                return True
+        except:
+            return False
         finally:
             conn.close()
-        return False
+        return True
 
     @staticmethod
     async def getAll() -> List[ItemModel]:
@@ -65,7 +66,7 @@ class ItemService:
     async def update(item: ItemModel) -> ItemModel:
         conn = await ItemService.db.acquire()
         query = f"UPDATE {ItemService.dbItem} SET name = %s, price = %s, quantity = %s, description = %s, manufacturer = %s WHERE id = %s"
-        values = (item.name, item.price, item.quantity, item.description, item.manufacturer, item.id)
+        values = (item.name, item.price, item.quantity, item.description, item.manufacturer, str(item.id))
         
         try:
             async with conn.cursor(aiomysql.DictCursor) as cursor:

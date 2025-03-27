@@ -38,18 +38,15 @@ class UserUpdate(UserBase):
 
 
 class UserSyncPush(UserBase):
-    fullname: str = None
+    id: str
+    fullname: str
     image_base64: str = None
-    created_at: datetime
-    updated_at: datetime
 
 
 class UserSyncPull(UserBase):
     id: str
     username: str
     image_base64: str = None
-    created_at: datetime
-    updated_at: datetime
 
 
 

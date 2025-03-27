@@ -4,7 +4,7 @@ from app.models.ItemModel import ItemModel
 from uuid import UUID
 
 class ItemTypeModel(BaseModel):
-    id: Optional[str] = None
+    id: Optional[UUID] = None
     name: str
     unit: str
     note: Optional[str] = None

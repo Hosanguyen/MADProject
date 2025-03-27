@@ -9,7 +9,7 @@ CREATE TABLE user
      fullname   VARCHAR(255) NOT NULL,
      image_url  VARCHAR(255),
      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-	 updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+	   updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
      role       VARCHAR(255) NOT NULL DEFAULT 'user'
   );
 
@@ -27,9 +27,9 @@ CREATE TABLE pet
      image_url  VARCHAR(255) NULL,
      note       VARCHAR(255) NULL,
      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-	 updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+	   updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
      userid     CHAR(36),
-     FOREIGN KEY (userid) REFERENCES user(id)
+     FOREIGN KEY (userid) REFERENCES user(id) ON DELETE CASCADE
   );
 
 -- Reminder Table
@@ -53,8 +53,8 @@ CREATE TABLE pet_reminder
      updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
      reminderid CHAR(36),
      petid      CHAR(36),
-     FOREIGN KEY (petid) REFERENCES pet(id),
-     FOREIGN KEY (reminderid) REFERENCES reminder(id)
+     FOREIGN KEY (petid) REFERENCES pet(id) ON DELETE CASCADE,
+     FOREIGN KEY (reminderid) REFERENCES reminder(id) ON DELETE CASCADE
   );
 
 -- Vaccination Table
@@ -67,7 +67,7 @@ CREATE TABLE vaccination
      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
      updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
      petid         CHAR(36),
-     FOREIGN KEY (petid) REFERENCES pet(id)
+     FOREIGN KEY (petid) REFERENCES pet(id) ON DELETE CASCADE
   );
 
 -- Veterinarian Table
@@ -93,7 +93,7 @@ CREATE TABLE medical_report
      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
      updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
      petid        CHAR(36),
-     FOREIGN KEY (petid) REFERENCES pet(id)
+     FOREIGN KEY (petid) REFERENCES pet(id) ON DELETE CASCADE
   );
 
 -- Image Medical Report Table
@@ -104,7 +104,7 @@ CREATE TABLE image_medical_report
      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
      updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
      medical_reportid CHAR(36),
-     FOREIGN KEY (medical_reportid) REFERENCES medical_report(id)
+     FOREIGN KEY (medical_reportid) REFERENCES medical_report(id) ON DELETE CASCADE
   );
 
 -- Post Table
@@ -115,7 +115,7 @@ CREATE TABLE post
      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
      updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
      userid     CHAR(36),
-     FOREIGN KEY (userid) REFERENCES user(id)
+     FOREIGN KEY (userid) REFERENCES user(id) ON DELETE CASCADE
   );
 
 -- Post Image Table
@@ -126,7 +126,7 @@ CREATE TABLE post_image
      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
      updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
      postid     CHAR(36),
-     FOREIGN KEY (postid) REFERENCES post(id)
+     FOREIGN KEY (postid) REFERENCES post(id) ON DELETE CASCADE
   );
 
 -- Comment Table
@@ -138,8 +138,8 @@ CREATE TABLE comment
      updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
      userid    CHAR(36),
      postid    CHAR(36),
-     FOREIGN KEY (userid) REFERENCES user(id),
-     FOREIGN KEY (postid) REFERENCES post(id)
+     FOREIGN KEY (userid) REFERENCES user(id) ON DELETE CASCADE,
+     FOREIGN KEY (postid) REFERENCES post(id) ON DELETE CASCADE
   );
 
 -- Reaction Table
@@ -151,8 +151,8 @@ CREATE TABLE reaction
      updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
      postid CHAR(36),
      userid CHAR(36),
-     FOREIGN KEY (postid) REFERENCES post(id),
-     FOREIGN KEY (userid) REFERENCES user(id)
+     FOREIGN KEY (postid) REFERENCES post(id) ON DELETE CASCADE,
+     FOREIGN KEY (userid) REFERENCES user(id) ON DELETE CASCADE
   );
 
 -- Nutrition Table  
@@ -202,7 +202,7 @@ CREATE TABLE item
      manufacturer VARCHAR(255),
      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
      updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-     FOREIGN KEY (item_typeid) REFERENCES item_type(id)
+     FOREIGN KEY (item_typeid) REFERENCES item_type(id) ON DELETE CASCADE
   );
 
 -- Cart Table
@@ -212,7 +212,7 @@ CREATE TABLE cart
      userid     CHAR(36),
      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
      updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-     FOREIGN KEY (userid) REFERENCES user(id)
+     FOREIGN KEY (userid) REFERENCES user(id) ON DELETE CASCADE
   );
 
 -- Cart Item Table
@@ -224,8 +224,8 @@ CREATE TABLE cart_item
      itemid     CHAR(36),
      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
      updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-     FOREIGN KEY (cartid) REFERENCES cart(id),
-     FOREIGN KEY (itemid) REFERENCES item(id)
+     FOREIGN KEY (cartid) REFERENCES cart(id) ON DELETE CASCADE,
+     FOREIGN KEY (itemid) REFERENCES item(id) ON DELETE CASCADE
   );
 
 -- Order Table
@@ -235,7 +235,7 @@ CREATE TABLE `order`
      userid     CHAR(36),
      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
      updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-     FOREIGN KEY (userid) REFERENCES user(id)
+     FOREIGN KEY (userid) REFERENCES user(id) ON DELETE CASCADE
   );
 
 -- Order Item Table
@@ -247,8 +247,8 @@ CREATE TABLE order_item
      updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
      orderid     CHAR(36),
      cart_itemid CHAR(36),
-     FOREIGN KEY (orderid) REFERENCES `order`(id),
-     FOREIGN KEY (cart_itemid) REFERENCES cart_item(id)
+     FOREIGN KEY (orderid) REFERENCES `order`(id) ON DELETE CASCADE,
+     FOREIGN KEY (cart_itemid) REFERENCES cart_item(id) ON DELETE CASCADE
   );
 
 -- GPS Device Table
@@ -261,7 +261,7 @@ CREATE TABLE gps_device
      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
      updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
      petid      CHAR(36),
-     FOREIGN KEY (petid) REFERENCES pet(id)
+     FOREIGN KEY (petid) REFERENCES pet(id) ON DELETE CASCADE
   );
 
 -- Diary Note Table
@@ -275,7 +275,7 @@ CREATE TABLE diary_note
      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
      updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
      petid      CHAR(36),
-     FOREIGN KEY (petid) REFERENCES pet(id)
+     FOREIGN KEY (petid) REFERENCES pet(id) ON DELETE CASCADE
   );
 
 -- Static Type Table
@@ -300,6 +300,6 @@ CREATE TABLE pet_statistic
      updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
      petid            CHAR(36),
      statistic_typeid CHAR(36),
-     FOREIGN KEY (petid) REFERENCES pet(id),
-     FOREIGN KEY (statistic_typeid) REFERENCES statistic_type(id)
+     FOREIGN KEY (petid) REFERENCES pet(id) ON DELETE CASCADE,
+     FOREIGN KEY (statistic_typeid) REFERENCES statistic_type(id) ON DELETE CASCADE
   ); 

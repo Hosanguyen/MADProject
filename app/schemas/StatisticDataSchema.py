@@ -1,5 +1,6 @@
 from app.models.StatisticDataModel import StatisticDataModel
+from uuid import UUID
 
 class StatisticDataCreate(StatisticDataModel):
-    petId: int
-    statisticTypeId : int
+    petId: UUID
+    statisticTypeId : UUID

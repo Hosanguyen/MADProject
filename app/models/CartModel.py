@@ -1,7 +1,8 @@
 from pydantic import BaseModel, Field
 from typing import Optional, List
 from app.models.CartItemModel import CartItemModel
+from uuid import UUID
 
 class CartModel(BaseModel):
-    id: Optional[int] = None
+    id: Optional[UUID] = None
     listItem: List[CartItemModel] = Field(default_factory=list)

@@ -8,10 +8,13 @@ router = APIRouter(tags=["item_type"])
 
 @router.post("/item_type/add")
 async def create(itemType: ItemTypeModel):
-    if(await ItemTypeService.create(itemType)):
-        return {"message": "Successfully"}
-    else:
-        return {"message": "Failed"}
+    success = await ItemTypeService.create(itemType)
+    
+    if success:
+        return {"message": "Created successfully"}
+    
+    # Nếu thất bại, ném lỗi HTTP 400
+    raise HTTPException(status_code=400, detail="Failed to create item type data")
 
 @router.get("/item_type/get", response_model=List[ItemTypeModel])
 async def get_all():
@@ -23,7 +26,16 @@ async def get_by_id(itemTypeId: UUID):
 
 @router.put("/item_type/update")
 async def update(itemType: ItemTypeModel):
-    if(await ItemTypeService.update(itemType)):
+    success = await ItemTypeService.update(itemType)
+    
+    if success:
         return {"message": "Updated successfully"}
-    else:
-        return {"message": "Updated Failed"}
+    
+    # Nếu thất bại, ném lỗi HTTP 400
+    raise HTTPException(status_code=400, detail="Failed to update item type data")
+
+@router.delete("/item_type/delete/{itemTypeId}")
+async def delete(itemtypeId: UUID):
+    if not await ItemTypeService.delete(itemtypeId):
+        raise HTTPException(status_code=404, detail="Statistic Data not found")
+    return {"message": "Deleted successfully"}

@@ -1,0 +1,523 @@
+{
+	"info": {
+		"_postman_id": "99f4656c-fc07-4b92-b25a-817b67af79e3",
+		"name": "MAD",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "42642738"
+	},
+	"item": [
+		{
+			"name": "Statistic",
+			"item": [
+				{
+					"name": "Create Statistic Type",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"food\",\n  \"description\": \"pet food\",\n  \"unit\": \"gram\"\n}"
+						},
+						"url": {
+							"raw": "http://{{server}}/statistic-types/",
+							"protocol": "http",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"statistic-types",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Statistic Types",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{server}}/statistic-types",
+							"protocol": "http",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"statistic-types"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Statistic Type by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8000/statistic-types/{{statistic_type_id}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"statistic-types",
+								"{{statistic_type_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Statistic Type",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"id\": \"{{statistic_type_id}}\",\n  \"name\": \"Humidity2\",\n  \"description\": \"Humidity Sensor\",\n  \"unit\": \"%\"\n}"
+						},
+						"url": {
+							"raw": "http://{{server}}/statistic-types/update",
+							"protocol": "http",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"statistic-types",
+								"update"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Statistic Type",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://{{server}}/statistic-types/{{statistic_type_id}}",
+							"protocol": "http",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"statistic-types",
+								"{{statistic_type_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Statistic Data",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"petId\": \"{{pet_id}}\",\n  \"statisticTypeId\": \"{{statistic_type_id}}\",\n  \"value\": 22.5,\n  \"recorded_at\": \"2025-03-23 10:00:00\"\n}"
+						},
+						"url": {
+							"raw": "http://{{server}}/statistic-data",
+							"protocol": "http",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"statistic-data"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Statistic Data",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{server}}/statistic-data",
+							"protocol": "http",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"statistic-data"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Statistic by Statistic Type",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{server}}/statistic-data/getByType/{{statistic_type_id}}",
+							"protocol": "http",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"statistic-data",
+								"getByType",
+								"{{statistic_type_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Statistic Data by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{server}}/statistic-data/{{statistic_data_id}}",
+							"protocol": "http",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"statistic-data",
+								"{{statistic_data_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Statistic Data",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"id\": \"{{statistic_data_id}}\",\n  \"value\": 26.0,\n  \"recorded_at\": \"2025-03-23T12:00:00\"\n}"
+						},
+						"url": {
+							"raw": "http://{{server}}/statistic-data/update",
+							"protocol": "http",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"statistic-data",
+								"update"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Statistic Data",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://{{server}}/statistic-data/{{statistic_data_id}}",
+							"protocol": "http",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"statistic-data",
+								"{{statistic_data_id}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "ItemType",
+			"item": [
+				{
+					"name": "Create Item Type",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"dog's food\",\r\n    \"unit\": \"gram\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{server}}/item_type/add",
+							"protocol": "http",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"item_type",
+								"add"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "Get By Id",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": \"6d7e646d-0ac1-11f0-992e-0250e6cba39f\",\r\n    \"name\": \"dog's food\",\r\n    \"unit\": \"gram\",\r\n    \"note\": \"alksjdlkajdlkasdj\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{server}}/item_type/update",
+							"protocol": "http",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"item_type",
+								"update"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://{{server}}/item_type/delete/{{item_type}}",
+							"protocol": "http",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"item_type",
+								"delete",
+								"{{item_type}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Item",
+			"item": [
+				{
+					"name": "Create Item",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"ten cua thuc an\",\r\n    \"quantity\": 3,\r\n    \"price\": 3.89,\r\n    \"manufacturer\": \"nha san xuat\",\r\n    \"itemTypeId\": \"{{item_type}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{server}}/item/add",
+							"protocol": "http",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"item",
+								"add"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{server}}/item",
+							"protocol": "http",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"item"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get By Type",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{server}}/item/getByType/{{item_type}}",
+							"protocol": "http",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"item",
+								"getByType",
+								"{{item_type}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get By Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{server}}/item/getById/{{item_id}}",
+							"protocol": "http",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"item",
+								"getById",
+								"{{item_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Item",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": {{item_id}},\r\n    \"name\": \"ten cua thuc an\",\r\n    \"quantity\": 10,\r\n    \"price\": 4.89,\r\n    \"description\": null,\r\n    \"manufacturer\": \"nha san xuat\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{server}}/item/update",
+							"protocol": "http",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"item",
+								"update"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Change Quantity",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"itemId\": {{item_id}},\r\n    \"quantity\": -10\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{server}}/item/changeQuantity",
+							"protocol": "http",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"item",
+								"changeQuantity"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Item",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://{{server}}/item/delete/{{item_id}}",
+							"protocol": "http",
+							"host": [
+								"{{server}}"
+							],
+							"path": [
+								"item",
+								"delete",
+								"{{item_id}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

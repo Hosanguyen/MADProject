@@ -3,12 +3,14 @@ from typing import Optional, List
 from app.core.database import Database
 from app.models.ItemModel import ItemModel
 from app.schemas.ItemSchema import ItemCreate
+from uuid import UUID
+
 class ItemService:
     db = Database()
     dbItem = "item"
 
     @staticmethod
-    async def create(item: ItemCreate) -> ItemModel:
+    async def create(item: ItemCreate) -> bool:
         conn = await ItemService.db.acquire()
         query = f"INSERT INTO {ItemService.dbItem} (name, price, quantity, description, manufacturer, item_typeid) VALUES (%s, %s, %s, %s, %s, %s)"
 
@@ -16,11 +18,10 @@ class ItemService:
             async with conn.cursor() as cursor:
                 await cursor.execute(query, (item.name, item.price, item.quantity, item.description, item.manufacturer, item.itemTypeId))
                 await conn.commit()
-                item.id = cursor.lastrowid
+                return True
         finally:
             conn.close()
-        itemCreated = ItemModel(id=item.id, name=item.name, quantity=item.quantity, price=item.price, description=item.description, manufacturer=item.manufacturer)
-        return itemCreated
+        return False
 
     @staticmethod
     async def getAll() -> List[ItemModel]:
@@ -35,7 +36,7 @@ class ItemService:
         return [ItemModel(**data) for data in datas]
     
     @staticmethod
-    async def getByType(itemType: int) -> List[ItemModel]:
+    async def getByType(itemType: UUID) -> List[ItemModel]:
         conn = await ItemService.db.acquire()
         query = f"SELECT id, name, price, quantity, description, manufacturer FROM {ItemService.dbItem} WHERE item_typeid = %s"
         values = (itemType)
@@ -48,7 +49,7 @@ class ItemService:
         return [ItemModel(**data) for data in datas]
     
     @staticmethod
-    async def getById(itemId: int) -> ItemModel:
+    async def getById(itemId: UUID) -> ItemModel:
         conn = await ItemService.db.acquire()
         query = f"SELECT id, name, price, quantity, description, manufacturer FROM {ItemService.dbItem} WHERE id = %s"
         values = (itemId)
@@ -75,7 +76,7 @@ class ItemService:
         return item
     
     @staticmethod
-    async def changeQuantity(itemId: int, quantity: int):
+    async def changeQuantity(itemId: UUID, quantity: int):
         conn = await ItemService.db.acquire()
         query = f"UPDATE {ItemService.dbItem} SET quantity = GREATEST(quantity + %s, 0 ) WHERE id = %s"
         values = (quantity, itemId)
@@ -90,7 +91,7 @@ class ItemService:
     
 
     @staticmethod
-    async def delete(itemId: int) -> bool:
+    async def delete(itemId: UUID) -> bool:
         conn = await ItemService.db.acquire()
         query = f"DELETE FROM {ItemService.dbItem} WHERE id = %s"
         values = (itemId)

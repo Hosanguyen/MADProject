@@ -2,6 +2,7 @@ from typing import Optional, List
 from fastapi import APIRouter, HTTPException
 from app.models.ItemTypeModel import ItemTypeModel
 from app.services.ItemTypeService import ItemTypeService
+from uuid import UUID
 
 router = APIRouter(tags=["item_type"])
 
@@ -17,7 +18,7 @@ async def get_all():
     return await ItemTypeService.getAll()
 
 @router.get("/item_type/getById/{itemTypeId}", response_model=ItemTypeModel)
-async def get_by_id(itemTypeId: int):
+async def get_by_id(itemTypeId: UUID):
     return await ItemTypeService.getById(itemTypeId)
 
 @router.put("/item_type/update")

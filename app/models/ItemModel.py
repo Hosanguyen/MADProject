@@ -1,9 +1,9 @@
 from pydantic import BaseModel
 from typing import Optional
-import uuid
+from uuid import UUID
 
 class ItemModel(BaseModel):
-    id: Optional[uuid.UUID] = None
+    id: Optional[UUID] = None
     name: str
     quantity: int
     price: float

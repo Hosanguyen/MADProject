@@ -1,7 +1,6 @@
 from pydantic import BaseModel
 from typing import List, Optional, Dict, Any
 from datetime import datetime, date
-from .PetModel import PetBase
 
 
 class UserBase(BaseModel):
@@ -21,12 +20,16 @@ class UserBase(BaseModel):
 
 class UserRegister(UserBase):
     username: str
-    password: str
+    hashed_password: str
+
+class UserResponse(UserBase):
+    id: str
+    username: str
 
 
 class UserLogin(BaseModel):
     username: str
-    password: str
+    hashed_password: str
 
 
 class UserUpdate(UserBase):
@@ -34,14 +37,19 @@ class UserUpdate(UserBase):
     fullname: Optional[str] = None
 
 
-class UserProfile(UserBase):
-    # Relationships
-    # pets: List["Pet"] = []
-    # posts: List["Post"] = []
-    pass
+class UserSyncPush(UserBase):
+    fullname: str = None
+    image_base64: str = None
+    created_at: datetime
+    updated_at: datetime
 
-class UserHome(UserBase):
-    # Relationships
-    pets: List["PetBase"] = []
-    # posts: List["Post"] = []
-    pass
+
+class UserSyncPull(UserBase):
+    id: str
+    username: str
+    image_base64: str = None
+    created_at: datetime
+    updated_at: datetime
+
+
+

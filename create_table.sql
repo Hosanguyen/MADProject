@@ -4,7 +4,7 @@ USE mad;
 CREATE TABLE user
   (
      id         CHAR(36) PRIMARY KEY DEFAULT (UUID()),
-     username   VARCHAR(255) NOT NULL,
+     username   VARCHAR(255) NOT NULL UNIQUE,
      password   VARCHAR(255) NOT NULL,
      fullname   VARCHAR(255) NOT NULL,
      image_url  VARCHAR(255),

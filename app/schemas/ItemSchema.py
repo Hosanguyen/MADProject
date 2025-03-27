@@ -1,9 +1,10 @@
 from app.models.ItemModel import ItemModel
 from pydantic import BaseModel
+from uuid import UUID
 
 class ItemCreate(ItemModel):
-    itemTypeId: int
+    itemTypeId: UUID
 
 class ItemUpdateQuantity(BaseModel):
-    itemId: int
-    quantity: int
+    itemId: UUID
+    quantity: UUID

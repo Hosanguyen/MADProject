@@ -4,13 +4,13 @@ USE mad;
 CREATE TABLE user
   (
      id         CHAR(36) PRIMARY KEY DEFAULT (UUID()),
-     username   VARCHAR(255) NOT NULL,
+     username   VARCHAR(255) NOT NULL UNIQUE,
      password   VARCHAR(255) NOT NULL,
      fullname   VARCHAR(255) NOT NULL,
      image_url  VARCHAR(255),
      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
 	 updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-     role       VARCHAR(255) NOT NULL
+     role       VARCHAR(255) NOT NULL DEFAULT 'user'
   );
 
 -- Pet Table

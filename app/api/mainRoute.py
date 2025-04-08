@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from app.api.routes import statistic, item, itemType,post, cart, cartItem, order, orderItem
+from app.api.routes import statistic, item, itemType,post, cart, cartItem, order, orderItem,comment,reaction
 from app.core.config import settings
 
 api_router = APIRouter()
@@ -11,4 +11,6 @@ api_router.include_router(cartItem.router)
 api_router.include_router(orderItem.router)
 api_router.include_router(order.router)
 api_router.include_router(post.router)
+api_router.include_router(comment.router)
+api_router.include_router(reaction.router)
 

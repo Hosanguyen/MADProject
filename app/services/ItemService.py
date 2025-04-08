@@ -21,7 +21,7 @@ class ItemService:
         except:
             return False
         finally:
-            conn.close()
+            await conn.ensure_closed()
         return True
 
     @staticmethod
@@ -33,7 +33,7 @@ class ItemService:
                 await cursor.execute(query)
                 datas = await cursor.fetchall()
         finally:
-            conn.close()
+            await conn.ensure_closed()
         return [ItemModel(**data) for data in datas]
     
     @staticmethod
@@ -46,7 +46,7 @@ class ItemService:
                 await cursor.execute(query, values)
                 datas = await cursor.fetchall()
         finally:
-            conn.close()
+            await conn.ensure_closed()
         return [ItemModel(**data) for data in datas]
     
     @staticmethod
@@ -59,8 +59,8 @@ class ItemService:
                 await cursor.execute(query, values)
                 data = await cursor.fetchone()
         finally:
-            conn.close()
-        return data
+            await conn.ensure_closed()
+        return ItemModel(**data)
     
     @staticmethod
     async def update(item: ItemModel) -> ItemModel:
@@ -73,7 +73,7 @@ class ItemService:
                 await cursor.execute(query, values)
                 conn.commit()
         finally:
-            conn.close()
+            await conn.ensure_closed()
         return item
     
     @staticmethod
@@ -87,7 +87,7 @@ class ItemService:
                 await cursor.execute(query, values)
                 await conn.commit()
         finally:
-            conn.close()
+            await conn.ensure_closed()
         return True
     
 
@@ -102,4 +102,4 @@ class ItemService:
                 await conn.commit()
                 return cursor.rowcount > 0
         finally:
-            conn.close()
+            await conn.ensure_closed()

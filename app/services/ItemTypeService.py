@@ -22,7 +22,7 @@ class ItemTypeService:
         except:
             return False
         finally:
-            conn.close()
+            await conn.ensure_closed()
         return True
     
     @staticmethod
@@ -35,7 +35,7 @@ class ItemTypeService:
                 await cursor.execute(query)
                 data = await cursor.fetchall()
         finally:
-            conn.close()
+            await conn.ensure_closed()
         result = []
         for d in data:
             itemType = ItemTypeModel(**d)
@@ -54,7 +54,7 @@ class ItemTypeService:
                 await cursor.execute(query, values)
                 data = await cursor.fetchone()
         finally:
-            conn.close()
+            await conn.ensure_closed()
         itemType = ItemTypeModel(**data)
         itemType.listItem = await ItemService.getByType(itemType.id)
         return itemType
@@ -72,7 +72,7 @@ class ItemTypeService:
         except:
             return False
         finally:
-            conn.close()
+            await conn.ensure_closed()
         
         return True
     
@@ -90,6 +90,6 @@ class ItemTypeService:
         except:
             return False
         finally:
-            conn.close()
+            await conn.ensure_closed()
 
         return True

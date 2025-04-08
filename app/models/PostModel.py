@@ -1,5 +1,6 @@
 from pydantic import BaseModel
 from typing import Optional
+from app.schemas.UserSchema import UserPost
 
 
 class PostModel(BaseModel):

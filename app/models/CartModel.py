@@ -5,4 +5,5 @@ from uuid import UUID
 
 class CartModel(BaseModel):
     id: Optional[UUID] = None
+    userId: UUID
     listItem: List[CartItemModel] = Field(default_factory=list)

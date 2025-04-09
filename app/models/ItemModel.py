@@ -9,4 +9,4 @@ class ItemModel(BaseModel):
     price: float
     description: Optional[str] = None
     manufacturer: str
-    
+    image_url: Optional[str] = None

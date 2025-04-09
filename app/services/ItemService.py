@@ -1,23 +1,52 @@
+import os
+import uuid
+import aiofiles
 import aiomysql
 from typing import Optional, List
+
+from fastapi import UploadFile
 from app.core.database import Database
 from app.models.ItemModel import ItemModel
 from app.schemas.ItemSchema import ItemCreate
 from uuid import UUID
+from app.core.config import settings
+
+IMAGE_ITEM = f"{settings.IMAGE_DIR}items/"
+
 
 class ItemService:
     db = Database()
     dbItem = "item"
 
     @staticmethod
-    async def create(item: ItemCreate) -> bool:
-        conn = await ItemService.db.acquire()
-        query = f"INSERT INTO {ItemService.dbItem} (name, price, quantity, description, manufacturer, item_typeid) VALUES (%s, %s, %s, %s, %s, %s)"
+    async def saveImage(image: UploadFile) -> Optional[str]:
+        if not image:
+            return None
+        filename = f"{uuid.uuid4()}.{image.filename.split('.')[-1]}"
+        save_path = f"{IMAGE_ITEM}{filename}"
 
         try:
+            os.makedirs(os.path.dirname(save_path), exist_ok=True)
+            async with aiofiles.open(save_path, "wb") as out_file:
+                content = await image.read()
+                await out_file.write(content)
+            return save_path, filename.split('.')[0]
+        except Exception as e:
+            print(f"Image save error: {e}")
+            return None
+
+    @staticmethod
+    async def create(item: ItemCreate) -> bool:
+        conn = await ItemService.db.acquire()
+        query = f"INSERT INTO {ItemService.dbItem} (id, name, price, quantity, description, manufacturer, item_typeid, image_url) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
+        filename, id = await ItemService.saveImage(item.image)
+        values = (id, item.name, item.price, item.quantity, item.description, item.manufacturer, item.itemTypeId, filename)
+        print(values)
+        try:
             async with conn.cursor() as cursor:
-                await cursor.execute(query, (item.name, item.price, item.quantity, item.description, item.manufacturer, item.itemTypeId))
+                await cursor.execute(query, values)
                 await conn.commit()
+
         except:
             return False
         finally:

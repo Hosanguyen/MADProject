@@ -35,7 +35,7 @@ async def update(itemType: ItemTypeModel):
     raise HTTPException(status_code=400, detail="Failed to update item type data")
 
 @router.delete("/item_type/delete/{itemTypeId}")
-async def delete(itemtypeId: UUID):
-    if not await ItemTypeService.delete(itemtypeId):
+async def delete(itemTypeId: UUID):
+    if not await ItemTypeService.delete(itemTypeId):
         raise HTTPException(status_code=404, detail="Statistic Data not found")
     return {"message": "Deleted successfully"}

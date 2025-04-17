@@ -4,9 +4,10 @@ from app.core.database import Database
 import aiomysql
 from app.services.ItemService import ItemService
 from uuid import UUID
+from app.core.database import db
 
 class ItemTypeService:
-    db = Database()
+    db = db
     dbItemtype = "item_type"
 
     @staticmethod
@@ -27,7 +28,7 @@ class ItemTypeService:
     
     @staticmethod
     async def getAll() -> List[ItemTypeModel]:
-        conn = await ItemTypeService.db.acquire()
+        conn = await db.acquire()
         query = f"SELECT id, name, unit, note FROM {ItemTypeService.dbItemtype}"
 
         try:
@@ -35,12 +36,13 @@ class ItemTypeService:
                 await cursor.execute(query)
                 data = await cursor.fetchall()
         finally:
-            await conn.ensure_closed()
+            # await conn.ensure_closed()
+            await db.release(conn)
         result = []
         for d in data:
             itemType = ItemTypeModel(**d)
             itemType.listItem = await ItemService.getByType(itemType.id)
-            result.append(d)
+            result.append(itemType)
         return result
     
     @staticmethod
@@ -55,7 +57,7 @@ class ItemTypeService:
                 data = await cursor.fetchone()
         finally:
             await conn.ensure_closed()
-        itemType = ItemTypeModel(**data)
+        itemType = ItemTypeModel(id=data.get("id"), name=data.get("name"), unit=data.get("unit"), note=data.get("note"))
         itemType.listItem = await ItemService.getByType(itemType.id)
         return itemType
     

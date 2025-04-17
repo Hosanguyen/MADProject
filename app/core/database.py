@@ -1,5 +1,6 @@
 import aiomysql
 from app.core.config import settings
+from contextlib import asynccontextmanager
 
 class Database:
     def __init__(self):
@@ -12,7 +13,9 @@ class Database:
             user=settings.MYSQL_USER,
             password=settings.MYSQL_PASSWORD,
             db=settings.MYSQL_DB,
-            autocommit=True
+            autocommit=True,
+            minsize=1,
+            maxsize=10
         )
 
     async def disconnect(self):
@@ -24,3 +27,9 @@ class Database:
         if not self.pool:
             await self.connect()
         return await self.pool.acquire()
+
+    async def release(self, conn):
+        if self.pool and conn:
+            self.pool.release(conn)
+
+db = Database()

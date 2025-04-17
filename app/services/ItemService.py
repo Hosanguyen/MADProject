@@ -10,12 +10,13 @@ from app.models.ItemModel import ItemModel
 from app.schemas.ItemSchema import ItemCreate, ItemUpdate
 from uuid import UUID
 from app.core.config import settings
+from app.core.database import db
 
 IMAGE_ITEM = f"{settings.IMAGE_DIR}items/"
 
 
 class ItemService:
-    db = Database()
+    db = db
     dbItem = "item"
 
     @staticmethod
@@ -55,7 +56,7 @@ class ItemService:
 
     @staticmethod
     async def getAll() -> List[ItemModel]:
-        conn = await ItemService.db.acquire()
+        conn = await db.acquire()
         query = f"SELECT id, name, price, quantity, description, manufacturer, image_url FROM {ItemService.dbItem}"
         try:
             async with conn.cursor(aiomysql.DictCursor) as cursor:

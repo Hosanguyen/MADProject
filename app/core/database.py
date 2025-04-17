@@ -26,10 +26,8 @@ class Database:
     async def acquire(self):
         if not self.pool:
             await self.connect()
+            
         return await self.pool.acquire()
-
+    
     async def release(self, conn):
-        if self.pool and conn:
-            self.pool.release(conn)
-
-db = Database()
+        self.pool.release(conn)

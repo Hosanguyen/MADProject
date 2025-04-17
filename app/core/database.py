@@ -13,9 +13,7 @@ class Database:
             user=settings.MYSQL_USER,
             password=settings.MYSQL_PASSWORD,
             db=settings.MYSQL_DB,
-            autocommit=True,
-            minsize=1,
-            maxsize=10
+            autocommit=True
         )
 
     async def disconnect(self):

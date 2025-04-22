@@ -1,3 +1,4 @@
+from fastapi.staticfiles import StaticFiles
 import uvicorn
 from fastapi import FastAPI
 from fastapi.websockets import WebSocket
@@ -16,7 +17,9 @@ app.add_middleware(
     allow_headers=["*"], 
 )
 
+app.mount("/static", StaticFiles(directory="static"), name="static")
+
 app.include_router(api_router)
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="127.0.0.1", port=8000)
+    uvicorn.run(app, host="0.0.0.0", port=8000)

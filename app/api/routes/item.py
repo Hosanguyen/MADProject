@@ -1,14 +1,24 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, File, Form, HTTPException, UploadFile
 from app.services.ItemService import ItemService
 from app.models.ItemModel import ItemModel
-from app.schemas.ItemSchema import ItemCreate, ItemUpdateQuantity
+from app.schemas.ItemSchema import ItemCreate, ItemUpdate, ItemUpdateQuantity
 from typing import Optional, List
 from uuid import UUID
 
 router = APIRouter(tags=["item"])
 
 @router.post("/item/add")
-async def create_item(item: ItemCreate):
+async def create_item(
+    name: str = Form(...),
+    quantity: int = Form(...),
+    price: float = Form(...),
+    description: Optional[str] = Form(None),
+    manufacturer: str = Form(...),
+    image: Optional[UploadFile] = File(None),
+    itemTypeId: UUID = Form(...) ,):
+
+    item = ItemCreate(name=name, quantity=quantity, price=price, description=description, manufacturer=manufacturer, image=image, itemTypeId=itemTypeId)
+
     success = await ItemService.create(item)
     
     if success:
@@ -30,9 +40,23 @@ async def get_by_id(itemId: UUID):
     return await ItemService.getById(itemId)
 
 @router.put("/item/update/")
-async def update(item: ItemModel):
+async def update(
+    id: UUID = Form(...),
+    name: str = Form(...),
+    quantity: int = Form(...),
+    price: float = Form(...),
+    description: Optional[str] = Form(None),
+    manufacturer: str = Form(...),
+    image: Optional[UploadFile] = File(None),
+    itemTypeId: Optional[UUID] = Form(None) ,):
+
+    item = ItemUpdate(id=id, name=name, quantity=quantity, price=price, description=description, manufacturer=manufacturer, image=image, itemTypeId=itemTypeId)
+
     data = await ItemService.update(item)
-    return {"message": "Updated successfully", "data": data}
+    if(data):
+        return {"message": "Updated successfully"}
+    else:
+        return {"message": "Failed"}
 
 @router.put("/item/changeQuantity")
 async def change_quantity(item: ItemUpdateQuantity):

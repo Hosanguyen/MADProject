@@ -200,6 +200,7 @@ CREATE TABLE item
      description VARCHAR(255),
      item_typeid CHAR(36),
      manufacturer VARCHAR(255),
+     image_url VARCHAR(255),
      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
      updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
      FOREIGN KEY (item_typeid) REFERENCES item_type(id) ON DELETE CASCADE

@@ -20,7 +20,7 @@ class UserBase(BaseModel):
 
 class UserRegister(UserBase):
     username: str
-    hashed_password: str
+    password: str
 
 class UserResponse(UserBase):
     id: str
@@ -29,7 +29,7 @@ class UserResponse(UserBase):
 
 class UserLogin(BaseModel):
     username: str
-    hashed_password: str
+    password: str
 
 
 class UserUpdate(UserBase):

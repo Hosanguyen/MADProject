@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from app.models.User import *
+from app.models.User import UserRegister, UserLogin, UserSyncPush, UserSyncPull
 from app.services import User_service
 
 router = APIRouter(tags=["user"])

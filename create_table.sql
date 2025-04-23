@@ -257,8 +257,11 @@ CREATE TABLE gps_device
   (
      id         CHAR(36) PRIMARY KEY DEFAULT (UUID()),
      name       VARCHAR(255),
+     latitude   FLOAT,
+     longitude  FLOAT,
      status     VARCHAR(255),
-     battery    VARCHAR(10),
+     battery    INT,
+     image_url  VARCHAR(255),
      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
      updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
      petid      CHAR(36),

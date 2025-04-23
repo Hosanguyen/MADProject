@@ -20,7 +20,7 @@ class UserBase(BaseModel):
 
 class UserRegister(UserBase):
     username: str
-    hashed_password: str
+    password: str
 
 class UserResponse(UserBase):
     id: str
@@ -29,7 +29,7 @@ class UserResponse(UserBase):
 
 class UserLogin(BaseModel):
     username: str
-    hashed_password: str
+    password: str
 
 
 class UserUpdate(UserBase):
@@ -38,18 +38,15 @@ class UserUpdate(UserBase):
 
 
 class UserSyncPush(UserBase):
-    fullname: str = None
+    id: str
+    fullname: str
     image_base64: str = None
-    created_at: datetime
-    updated_at: datetime
 
 
 class UserSyncPull(UserBase):
     id: str
     username: str
     image_base64: str = None
-    created_at: datetime
-    updated_at: datetime
 
 
 

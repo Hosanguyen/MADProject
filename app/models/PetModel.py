@@ -25,6 +25,7 @@ class PetBase(BaseModel):
     
     
 class PetCreate(PetBase):
+    id: Optional[str] = None
     breed_name: str
     gender: str
     birth_date: Optional[date] = None
@@ -32,6 +33,7 @@ class PetCreate(PetBase):
     height: float
     weight: float
     image_url: Optional[str] = None
-    userid: int
+    userid: str
 
-class Pet
+class PetResponse(BaseModel):
+    id: str

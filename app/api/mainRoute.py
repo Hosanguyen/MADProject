@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from app.api.routes import statistic, item, itemType,post, cart, cartItem, order, orderItem,comment,reaction,user
+from app.api.routes import statistic, item, itemType,post, cart, cartItem, order, orderItem,comment,reaction,user,gps, pet
 from app.core.config import settings
 
 api_router = APIRouter()
@@ -13,5 +13,6 @@ api_router.include_router(order.router)
 api_router.include_router(post.router)
 api_router.include_router(comment.router)
 api_router.include_router(reaction.router)
-
+api_router.include_router(gps.router)
 api_router.include_router(user.router)
+api_router.include_router(pet.router)

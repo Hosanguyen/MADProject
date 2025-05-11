@@ -19,6 +19,7 @@ class UserBase(BaseModel):
 
 
 class UserRegister(UserBase):
+    id: str
     username: str
     password: str
 

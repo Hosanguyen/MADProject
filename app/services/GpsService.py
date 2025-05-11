@@ -36,12 +36,14 @@ class GpsService:
     @staticmethod
     async def update_location_and_battery(gps_device: GPSDevice) -> bool:
         conn = await GpsService.db.acquire()
-        query = f"UPDATE {GpsService.table_name} SET latitude = %s, longitude = %s, battery = %s WHERE id = %s"
-        values = (gps_device.latitude, gps_device.longitude, gps_device.battery, gps_device.id)
+        print(f"Updating GPS device: {gps_device}")
+        query = f"UPDATE {GpsService.table_name} SET latitude = %s, longitude = %s, status= %s, battery = %s WHERE id = %s"
+        values = (gps_device.latitude, gps_device.longitude, gps_device.status, gps_device.battery, gps_device.id)
         try:
             async with conn.cursor() as cursor:
                 await cursor.execute(query, values)
                 await conn.commit()
+                print("okok")
         except Exception as e:
             print(f"Error updating GPS device location and battery: {e}")
             return False

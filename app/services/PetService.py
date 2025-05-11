@@ -9,7 +9,7 @@ class PetService:
     @staticmethod
     async def create_pet(pet: PetCreate) -> PetResponse:
         conn = await PetService.db.acquire()
-        pet_id = str(uuid.uuid4())
+        pet_id = pet.id
         pet_create = (
             pet_id,
             pet.name,

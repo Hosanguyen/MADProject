@@ -69,7 +69,7 @@ async def register(user: UserRegister) -> UserResponse:
                 raise HTTPException(status_code=400, detail="Tên người dùng đã tồn tại")
 
             # Create a new UUID
-            user_id = str(uuid.uuid4())
+            user_id = user.id
             # Hash the password
             hashed_password = bcrypt.hashpw(
                 user.password.encode("utf-8"), bcrypt.gensalt()

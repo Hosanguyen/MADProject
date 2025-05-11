@@ -42,7 +42,7 @@ async def update_gps_device_location_and_battery(request: Request):
     
     print(f"Received update for device {device_id}: latitude={latitude}, longitude={longitude}, batteryLevel={battery_level}")
     
-    gps_device = GPSDevice(id=device_id, latitude=latitude, longitude=longitude, battery=int(battery_level))
+    gps_device = GPSDevice(id=device_id, latitude=latitude, longitude=longitude, battery=int(battery_level), status="Connected")
     
     is_gps_device_exists = await GpsService.is_device_id_exists(device_id)
     if not is_gps_device_exists:

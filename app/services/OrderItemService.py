@@ -5,7 +5,7 @@ from uuid import UUID
 
 from app.core.database import Database
 from app.models.OrderItemModel import OrderItemModel
-from app.schemas.OrderItemSchema import OrderItemCreate
+from app.schemas.OrderItemSchema import OrderItemCreate, OrderItemResponse
 from app.services.CartItemService import CartItemService
 
 class OrderItemService:
@@ -28,7 +28,7 @@ class OrderItemService:
         except Exception as e:
             raise HTTPException(status_code=500, detail=f"Failed to create order item: {str(e)}")
         finally:
-            await conn.ensure_closed()
+            await OrderItemService.db.release(conn)
 
     @staticmethod
     async def getAll() -> List[OrderItemModel]:
@@ -41,7 +41,7 @@ class OrderItemService:
         except Exception as e:
             raise HTTPException(status_code=500, detail=f"Failed to retrieve order items: {str(e)}")
         finally:
-            await conn.ensure_closed()
+            await OrderItemService.db.release(conn)
 
         result = []
         for data in datas:
@@ -51,7 +51,7 @@ class OrderItemService:
         return result
 
     @staticmethod
-    async def getByOrderId(orderId: UUID) -> List[OrderItemModel]:
+    async def getByOrderId(orderId: UUID) -> List[OrderItemResponse]:
         conn = await OrderItemService.db.acquire()
         query = f"SELECT id, cart_itemid FROM {OrderItemService.dbOrderItem} WHERE orderid = %s"
         values = (orderId)
@@ -62,12 +62,12 @@ class OrderItemService:
         except Exception as e:
             raise HTTPException(status_code=500, detail=f"Failed to retrieve order items: {str(e)}")
         finally:
-            await conn.ensure_closed()
+            await OrderItemService.db.release(conn)
 
         result = []
         for data in datas:
             cartItem = await CartItemService.getById(data.get("cart_itemid"))
-            orderItem = OrderItemModel(id=data.get("id"), cartItem=cartItem)
+            orderItem = OrderItemResponse(id=data.get("id"), cartItem=cartItem)
             result.append(orderItem)
         return result
 
@@ -83,7 +83,7 @@ class OrderItemService:
         except Exception as e:
             raise HTTPException(status_code=500, detail=f"Failed to retrieve order items: {str(e)}")
         finally:
-            await conn.ensure_closed()
+            await OrderItemService.db.release(conn)
 
         cartItem = await CartItemService.getById(data.get("cart_itemid"))
         orderItem = OrderItemModel(id=orderItemId, cartItem=cartItem)
@@ -127,7 +127,7 @@ class OrderItemService:
     #     except Exception as e:
     #         raise HTTPException(status_code=500, detail=f"Failed to update cart item quantity: {str(e)}")
     #     finally:
-    #         await conn.ensure_closed()
+    #         await OrderItemService.db.release(conn)
 
     @staticmethod
     async def delete(orderItemId: UUID) -> bool:
@@ -146,4 +146,4 @@ class OrderItemService:
         except Exception as e:
             raise HTTPException(status_code=500, detail=f"Failed to delete order item: {str(e)}")
         finally:
-            await conn.ensure_closed()
+            await OrderItemService.db.release(conn)

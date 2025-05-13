@@ -1,5 +1,6 @@
 import aiomysql
 from app.core.config import settings
+from contextlib import asynccontextmanager
 
 class Database:
     def __init__(self):

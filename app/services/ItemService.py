@@ -50,7 +50,7 @@ class ItemService:
         except:
             return False
         finally:
-            await conn.ensure_closed()
+            await ItemService.db.release(conn)
         return True
 
     @staticmethod
@@ -62,7 +62,7 @@ class ItemService:
                 await cursor.execute(query)
                 datas = await cursor.fetchall()
         finally:
-            await conn.ensure_closed()
+            await ItemService.db.release(conn)
         return [ItemModel(**data) for data in datas]
     
     @staticmethod
@@ -75,7 +75,7 @@ class ItemService:
                 await cursor.execute(query, values)
                 datas = await cursor.fetchall()
         finally:
-            await conn.ensure_closed()
+            await ItemService.db.release(conn)
         return [ItemModel(**data) for data in datas]
     
     @staticmethod
@@ -88,7 +88,7 @@ class ItemService:
                 await cursor.execute(query, values)
                 data = await cursor.fetchone()
         finally:
-            await conn.ensure_closed()
+            await ItemService.db.release(conn)
         return ItemModel(**data)
     
     @staticmethod
@@ -112,7 +112,7 @@ class ItemService:
             return False
 
         finally:
-            await conn.ensure_closed()
+            await ItemService.db.release(conn)
         return True
     
     @staticmethod
@@ -126,7 +126,7 @@ class ItemService:
                 await cursor.execute(query, values)
                 await conn.commit()
         finally:
-            await conn.ensure_closed()
+            await ItemService.db.release(conn)
         return True
     
 
@@ -141,4 +141,4 @@ class ItemService:
                 await conn.commit()
                 return cursor.rowcount > 0
         finally:
-            await conn.ensure_closed()
+            await ItemService.db.release(conn)

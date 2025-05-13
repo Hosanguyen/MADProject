@@ -34,3 +34,8 @@ async def update_quantity(cart_item_id: UUID, quantity_update: CartItemUpdateQua
 async def delete_cart_item(cart_item_id: UUID):
     await CartItemService.delete(cart_item_id)
     return {"message": "Deleted successfully"}
+
+@router.delete("/remove/{cart_item_id}")
+async def remove_cart_item(cart_item_id:UUID):
+    await CartItemService.remove(cart_item_id)
+    return {"message:" "Removed successfully"}

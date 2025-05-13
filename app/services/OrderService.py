@@ -1,6 +1,7 @@
 import aiomysql
 from typing import List
 from fastapi import HTTPException
+import uuid
 from uuid import UUID
 
 from app.core.database import Database
@@ -8,7 +9,8 @@ from app.models.OrderModel import OrderModel
 from app.schemas.OrderSchema import OrderCreate
 from app.services.OrderItemService import OrderItemService
 from app.models.User import UserBase
-
+from app.models.OrderItemModel import OrderItemModel
+from app.schemas.OrderSchema import OrderInit
 class OrderService:
     db = Database()
     dbOrder = "order"
@@ -28,7 +30,7 @@ class OrderService:
         except Exception as e:
             raise HTTPException(status_code=500, detail=f"Failed to create order: {str(e)}")
         finally:
-            await conn.ensure_closed()
+            await OrderService.db.release(conn)
 
     @staticmethod
     async def getAll() -> List[OrderModel]:
@@ -41,7 +43,7 @@ class OrderService:
         except Exception as e:
             raise HTTPException(status_code=500, detail=f"Failed to retrieve order items: {str(e)}")
         finally:
-            await conn.ensure_closed()
+            await OrderService.db.release(conn)
 
         result = []
         for data in datas:
@@ -63,7 +65,7 @@ class OrderService:
         except Exception as e:
             raise HTTPException(status_code=500, detail=f"Failed to retrieve order items: {str(e)}")
         finally:
-            await conn.ensure_closed()
+            await OrderService.db.release(conn)
 
         result = []
         for data in datas:
@@ -85,7 +87,7 @@ class OrderService:
         except Exception as e:
             raise HTTPException(status_code=500, detail=f"Failed to retrieve order items: {str(e)}")
         finally:
-            await conn.ensure_closed()
+            await OrderService.db.release(conn)
 
         user = await OrderService.getUser(data.get("userid"))
         listOrderItem = await OrderItemService.getByOrderId(orderId)
@@ -109,7 +111,7 @@ class OrderService:
         except Exception as e:
             raise HTTPException(status_code=500, detail=f"Failed to delete order item: {str(e)}")
         finally:
-            await conn.ensure_closed()
+            await OrderService.db.release(conn)
 
     @staticmethod
     async def getUser(userId: UUID):
@@ -123,6 +125,68 @@ class OrderService:
         except Exception as e:
             raise HTTPException(status_code=500, detail=f"Failed to retrieve user: {str(e)}")
         finally:
-            await conn.ensure_closed()
+            await OrderService.db.release(conn)
         user = UserBase(fullname=userData.get("fullname"), image_url=userData.get("image_url"))
         return user
+    
+    @staticmethod
+    async def createOrder(order: OrderInit):
+        if not order:
+            raise HTTPException(status_code=400, detail="Order item list is empty.")
+        
+        userId = order.userId
+        orderId = uuid.uuid4()
+        conn = await OrderService.db.acquire()
+        try:
+            async with conn.cursor(aiomysql.DictCursor) as cursor:
+
+                for item in order.listItem:
+                    cartItemId = item.cartItem.id
+                    quantityRequested = item.cartItem.quantity
+
+                    # Lấy thông tin sản phẩm tương ứng từ cart_item
+                    await cursor.execute("""
+                        SELECT itemid FROM cart_item WHERE id = %s
+                    """, (cartItemId,))
+                    cartItem = await cursor.fetchone()
+                    if not cartItem:
+                        raise HTTPException(status_code=404, detail=f"Cart item {cartItemId} not found.")
+                    
+                    productId = cartItem['itemid']
+                    await cursor.execute("""
+                        SELECT quantity FROM item WHERE id = %s
+                    """, (productId,))
+                    product = await cursor.fetchone()
+                    if not product:
+                        raise HTTPException(status_code=404, detail=f"Product {productId} not found.")
+                
+                    if product['quantity'] < quantityRequested:
+                        raise HTTPException(
+                            status_code=400,
+                            detail=f"Product {productId} does not have enough stock. Available: {product['quantity']}, requested: {quantityRequested}"
+                        )
+                    
+                order_query = f"INSERT INTO `{OrderService.dbOrder}` (id, userid) VALUES (%s, %s)"
+                order_query_values = (str(orderId), str(userId))
+                await cursor.execute(order_query, order_query_values)
+
+                item_query = """
+                    INSERT INTO order_item (quantity, orderid, cart_itemid)
+                    VALUES (%s, %s, %s)
+                """
+                for item in order.listItem:
+                    values = (item.cartItem.quantity, orderId, item.cartItem.id)
+                    await cursor.execute(item_query, values)
+                    await cursor.execute("""
+                        UPDATE item
+                        SET quantity = quantity - %s
+                        WHERE id = (
+                            SELECT itemid FROM cart_item WHERE id = %s
+                        )
+                    """, (item.cartItem.quantity, item.cartItem.id))
+                await conn.commit()
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=f"Failed to retrieve user: {str(e)}")
+        finally:
+            await OrderService.db.release(conn)
+    

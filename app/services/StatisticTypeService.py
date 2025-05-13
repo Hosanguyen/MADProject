@@ -20,7 +20,7 @@ class StatisticTypeService:
         except:
                 return False
         finally:
-            conn.close()
+            await StatisticTypeService.db.release(conn)
         return True
 
     @staticmethod
@@ -32,7 +32,7 @@ class StatisticTypeService:
                 await cursor.execute(query)
                 stats = await cursor.fetchall()
         finally:
-            conn.close()
+            await StatisticTypeService.db.release(conn)
         result = []
         for stat in stats:
             data = StatisticTypeModel(**stat)
@@ -50,7 +50,7 @@ class StatisticTypeService:
                 await cursor.execute(query, values)
                 stat = await cursor.fetchone()
         finally:
-            conn.close()
+            await StatisticTypeService.db.release(conn)
 
         data = StatisticTypeModel(**stat)
         data.listStatisticData = await StatisticDataService.getByType(data.id)
@@ -68,7 +68,7 @@ class StatisticTypeService:
                 if cursor.rowcount == 0:
                     return None
         finally:
-            conn.close()
+            await StatisticTypeService.db.release(conn)
 
         return statUpdate
 
@@ -83,4 +83,4 @@ class StatisticTypeService:
                 await conn.commit()
                 return cursor.rowcount > 0
         finally:
-            conn.close()
+            await StatisticTypeService.db.release(conn)

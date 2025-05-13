@@ -32,7 +32,7 @@ class CartItemService:
         except Exception as e:
             raise HTTPException(status_code=500, detail=f"Failed to create cart item: {str(e)}")
         finally:
-            await conn.ensure_closed()
+            await CartItemService.db.release(conn)
 
     @staticmethod
     async def getAll() -> List[CartItemModel]:
@@ -45,7 +45,7 @@ class CartItemService:
         except Exception as e:
             raise HTTPException(status_code=500, detail=f"Failed to retrieve cart items: {str(e)}")
         finally:
-            await conn.ensure_closed()
+            await CartItemService.db.release(conn)
 
         result = []
         for data in datas:
@@ -67,12 +67,12 @@ class CartItemService:
         except Exception as e:
             raise HTTPException(status_code=500, detail=f"Failed to retrieve cart items by cart ID: {str(e)}")
         finally:
-            await conn.ensure_closed()
+            await CartItemService.db.release(conn)
 
         result = []
         for data in datas:
             item = await ItemService.getById(data.get("itemid"))
-            itemResponse = ItemResponseCart(id=item.id, name=item.name, price=item.price, description=item.description, manufacturer=item.manufacturer)
+            itemResponse = ItemResponseCart(id=item.id, name=item.name, price=item.price, description=item.description, manufacturer=item.manufacturer, image_url=item.image_url)
             cartItem = CartItemModel(id=data.get("id"), quantity=data.get("quantity"), item=itemResponse)
             result.append(cartItem)
         return result
@@ -93,10 +93,10 @@ class CartItemService:
         except Exception as e:
             raise HTTPException(status_code=500, detail=f"Failed to retrieve cart item by ID: {str(e)}")
         finally:
-            await conn.ensure_closed()
+            await CartItemService.db.release(conn)
 
         item = await ItemService.getById(data.get("itemid"))
-        itemResponse = ItemResponseCart(id=item.id, name=item.name, price=item.price, description=item.description, manufacturer=item.manufacturer)
+        itemResponse = ItemResponseCart(id=item.id, name=item.name, price=item.price, description=item.description, manufacturer=item.manufacturer, image_url=item.image_url)
         cartItem = CartItemModel(id=data.get("id"), quantity=data.get("quantity"), item=itemResponse)
         return cartItem
 
@@ -138,7 +138,7 @@ class CartItemService:
         except Exception as e:
             raise HTTPException(status_code=500, detail=f"Failed to update cart item quantity: {str(e)}")
         finally:
-            await conn.ensure_closed()
+            await CartItemService.db.release(conn)
 
     @staticmethod
     async def delete(cartItemId: UUID) -> bool:
@@ -157,4 +157,23 @@ class CartItemService:
         except Exception as e:
             raise HTTPException(status_code=500, detail=f"Failed to delete cart item: {str(e)}")
         finally:
-            await conn.ensure_closed()
+            await CartItemService.db.release(conn)
+
+    @staticmethod
+    async def remove(cartItemId: UUID) -> bool:
+        conn = await CartItemService.db.acquire()
+        query = f"UPDATE {CartItemService.dbCartItem} SET cartid = 0 WHERE id = %s"
+        values = (cartItemId,)
+        try:
+            async with conn.cursor() as cursor:
+                await cursor.execute(query, values)
+                await conn.commit()
+                if cursor.rowcount == 0:
+                    raise HTTPException(status_code=404, detail="Cart item not found for deletion.")
+            return True
+        except HTTPException:
+            raise
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=f"Failed to delete cart item: {str(e)}")
+        finally:
+            await CartItemService.db.release(conn)

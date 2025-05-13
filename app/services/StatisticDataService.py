@@ -20,7 +20,7 @@ class StatisticDataService:
         except:
             return False
         finally:
-            conn.close()
+            await StatisticDataService.db.release(conn)
         
         return True
 
@@ -33,7 +33,7 @@ class StatisticDataService:
                 await cursor.execute(query)
                 data = await cursor.fetchall()
         finally:
-            conn.close()
+            await StatisticDataService.db.release(conn)
 
         return [StatisticDataModel(**d) for d in data]
     
@@ -46,7 +46,7 @@ class StatisticDataService:
                 await cursor.execute(query, values)
                 data = await cursor.fetchall()
         finally:
-            conn.close()
+            await StatisticDataService.db.release(conn)
 
         return [StatisticDataModel(**d) for d in data]
 
@@ -60,8 +60,7 @@ class StatisticDataService:
                 await cursor.execute(query, values)
                 data = await cursor.fetchone()
         finally:
-            conn.close()
-
+            await StatisticDataService.db.release(conn)
         return StatisticDataModel(**data) if data else None
 
     @staticmethod
@@ -76,7 +75,7 @@ class StatisticDataService:
                 if cursor.rowcount == 0:
                     return None
         finally:
-            conn.close()
+            await StatisticDataService.db.release(conn)
 
         return dataUpdate
 
@@ -91,4 +90,4 @@ class StatisticDataService:
                 await conn.commit()
                 return cursor.rowcount > 0
         finally:
-            conn.close()
+            await StatisticDataService.db.release(conn)

@@ -53,4 +53,5 @@ class ItemResponseCart(BaseModel):
     price: float
     description: Optional[str] = None
     manufacturer: str
+    image_url: str
     

@@ -28,6 +28,16 @@ class PetService:
                 query = f"""
                 INSERT INTO {PetService.table_name} (id, name, breed_name, gender, birth_date, color, height, weight, image_url, userid)
                 VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                ON DUPLICATE KEY UPDATE
+                name = VALUES(name),
+                breed_name = VALUES(breed_name),
+                gender = VALUES(gender),
+                birth_date = VALUES(birth_date),
+                color = VALUES(color),
+                height = VALUES(height),
+                weight = VALUES(weight),
+                image_url = VALUES(image_url),
+                userid = VALUES(userid);
                 """
                 await cur.execute(query, pet_create)
                 await conn.commit()

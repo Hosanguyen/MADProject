@@ -20,7 +20,20 @@ class GpsService:
     @staticmethod
     async def create(gps_device: GPSDevice) -> bool:
         conn = await GpsService.db.acquire()
-        query = f"INSERT INTO {GpsService.table_name} (id, name, latitude, longitude, status, battery, image_url, petid) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
+        # query = f"INSERT INTO {GpsService.table_name} (id, name, latitude, longitude, status, battery, image_url, petid) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
+        query = f"""
+        INSERT INTO {GpsService.table_name}
+        (id, name, latitude, longitude, status, battery, image_url, petid)
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+        ON DUPLICATE KEY UPDATE  -- dùng nếu MySQL
+            name=VALUES(name),
+            latitude=VALUES(latitude),
+            longitude=VALUES(longitude),
+            status=VALUES(status),
+            battery=VALUES(battery),
+            image_url=VALUES(image_url),
+            petid=VALUES(petid)
+        """
         values = (gps_device.id, gps_device.name, gps_device.latitude, gps_device.longitude, gps_device.status, gps_device.battery, gps_device.image_url, gps_device.petid)
         try:
             async with conn.cursor() as cursor:
